@@ -1,8 +1,9 @@
 import './App.css';
+import Movies from './Components/Movies';
 
 function App() {
   return (
-    <h1>Hello React</h1>
+    <Movies></Movies>
   );
 }
 
