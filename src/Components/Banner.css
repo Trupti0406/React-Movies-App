@@ -1,5 +1,5 @@
 .banner_img{
-    height:40vh;
+    height:60vh;
     width:100vw;
-    object-fit: cover;
+    object-fit: cover cover;
 }

@@ -1,6 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/alt-text */
 import React from "react";
 import "./Header.css";
 import "./Banner.css";
+import "./MovieList.css";
+import movies from "./Movies";
 
 function Home() {
   return (
@@ -28,16 +32,71 @@ function Header() {
 
 // Banner
 function Banner() {
-  // state variable
-  let [firstMovie, setMovie] = React.useState("");
-  React.useEffect(
-    function () {
-
-    }, []);
-  console.log("render");
+  let [firstMovie, setFirstMovie] = React.useState("");
+  React.useEffect(async function () {
+    // Using fetch() to send a request
+    let response = await fetch(
+      "https://api.themoviedb.org/3/trending/movie/week?api_key=c5ff736cea18f92d40b30cd299575bbd"
+    );
+    // The response would be in buffer(binary form), so conerting it to jason
+    let data = await response.json();
+    // console.log("Data", data);
+    let movies = data.results;
+    setFirstMovie(movies[0]);
+  }, []);
   return (
     <>
-      <h1>I am Banner</h1>
+      {firstMovie === "" ? (
+        <h2>Movies are loading...</h2>
+      ) : (
+        <>
+          <h2>{firstMovie.original_title}</h2>
+          <img
+            src={
+              "http://image.tmdb.org/t/p/original" + firstMovie.backdrop_path
+            }
+            className="banner_img"
+          ></img>
+        </>
+      )}
+    </>
+  );
+}
+
+// Movie List
+function MovieList() {
+  let [movies, setMovies] = React.useState("");
+  React.useEffect(async function () {
+    // Using fetch() to send a request
+    let response = await fetch(
+      "https://api.themoviedb.org/3/trending/movie/week?api_key=c5ff736cea18f92d40b30cd299575bbd"
+    );
+    // The response would be in buffer(binary form), so conerting it to jason
+    let data = await response.json();
+    // console.log("Data", data);
+    let movies = data.results;
+    setMovies(movies);
+  }, []);
+  return (
+    <>
+      <h2>Trending Movies</h2>
+      {movies === "" ? (
+        <h2>Loading trending movies...</h2>
+      ) : (
+        <div className="trending_box">
+          {movies.map((movieObj, idx) => {
+            return (
+              <div key={idx} className="poster_box">
+                <h2>{movieObj.original_title}</h2>
+                <img
+                  src={"http://image.tmdb.org/t/p/w500/" + movieObj.poster_path}
+                  className="poster_img"
+                ></img>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </>
   );
 }
@@ -50,17 +109,12 @@ function Banner() {
 
 
 
-
-
-
-
-
-// Movie List
-function MovieList() {
-  return <h2>Movie List</h2>;
-}
-
 // Pagination
 function Pagination() {
   return <h2>Pagination</h2>;
 }
+
+
+
+
+
