@@ -66,6 +66,11 @@ function Banner() {
 // Movie List
 function MovieList() {
   let [movies, setMovies] = React.useState("");
+  let [value, setValue] = React.useState("");
+  function setText(e) {
+    let newValue = e.target.value;
+    setValue(newValue);
+  }
   React.useEffect(async function () {
     // Using fetch() to send a request
     let response = await fetch(
@@ -77,14 +82,30 @@ function MovieList() {
     let movies = data.results;
     setMovies(movies);
   }, []);
+// Logic To search movies
+  function filterLogic(searchText, movieArray) {
+    let filteredMovieArray = [];
+    for (let i = 0; i < movieArray.length; i++) {
+      let upperSearchText = searchText.toUpperCase();
+      let movieName = movieArray[i].original_title;
+      let upperText = movieName.toUpperCase();
+      let ans = upperText.includes(upperSearchText);
+      if (ans == true) {
+        filteredMovieArray.push(movieArray[i]);
+      }
+    }
+    return filteredMovieArray;
+  }
+  let searchedMovies = filterLogic(value, movies);
   return (
     <>
       <h2>Trending Movies</h2>
+      <input onChange={setText} value={value}></input>
       {movies === "" ? (
         <h2>Loading trending movies...</h2>
       ) : (
         <div className="trending_box">
-          {movies.map((movieObj, idx) => {
+          {searchedMovies.map((movieObj, idx) => {
             return (
               <div key={idx} className="poster_box">
                 <h2>{movieObj.original_title}</h2>
@@ -101,20 +122,9 @@ function MovieList() {
   );
 }
 
-
-
-
-
-
-
-
-
 // Pagination
 function Pagination() {
   return <h2>Pagination</h2>;
 }
-
-
-
 
 
