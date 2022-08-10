@@ -1,0 +1,29 @@
+.pagination{
+    display: flex;
+    justify-content: center;
+}
+
+.previous_btn{
+    border: 1px solid lightblue;
+    height: 2rem;
+    width: 4.5rem;
+    text-align: center;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    cursor: pointer;
+}
+.page_no{
+border: 1px solid lightblue;
+    height: 2rem;
+    width: 2rem;
+    text-align: center;
+}
+.next_btn{
+    border: 1px solid lightblue;
+    height: 2rem;
+    width: 4.5rem;
+    text-align: center;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+}

@@ -4,15 +4,40 @@ import React from "react";
 import "./Header.css";
 import "./Banner.css";
 import "./MovieList.css";
+import "./Pagination.css";
 import movies from "./Movies";
 
 function Home() {
+    // Paginaation
+    const [pageNo, setPageNo] = React.useState(1);
+    function increasePageNumber() {
+      setPageNo(function (prevState) {
+        return prevState + 1;
+      });
+    }
+    function decreasePageNumber() {
+      if (pageNo == 1) {
+        return;
+      }
+      setPageNo(function (prevState) {
+        return prevState - 1;
+      });
+    }
   return (
     <>
       <Header></Header>
       <Banner></Banner>
-      <MovieList></MovieList>
-      <Pagination></Pagination>
+      <MovieList pageNo={pageNo}></MovieList>
+      {/* Pagination Jsx */}
+      <div className="pagination">
+      <div className="previous_btn" onClick={decreasePageNumber}>
+        Previous
+      </div>
+      <div className="page_no">{pageNo}</div>
+      <div className="next_btn" onClick={increasePageNumber}>
+        Next
+      </div>
+    </div>
     </>
   );
 }
@@ -64,7 +89,7 @@ function Banner() {
 }
 
 // Movie List
-function MovieList() {
+function MovieList(props) {
   let [movies, setMovies] = React.useState("");
   let [value, setValue] = React.useState("");
   function setText(e) {
@@ -74,7 +99,7 @@ function MovieList() {
   React.useEffect(async function () {
     // Using fetch() to send a request
     let response = await fetch(
-      "https://api.themoviedb.org/3/trending/movie/week?api_key=c5ff736cea18f92d40b30cd299575bbd"
+      "https://api.themoviedb.org/3/trending/movie/week?api_key=c5ff736cea18f92d40b30cd299575bbd&page="+props.pageNo
     );
     // The response would be in buffer(binary form), so conerting it to jason
     let data = await response.json();
@@ -82,7 +107,7 @@ function MovieList() {
     let movies = data.results;
     setMovies(movies);
   }, []);
-// Logic To search movies
+  // Logic To search movies
   function filterLogic(searchText, movieArray) {
     let filteredMovieArray = [];
     for (let i = 0; i < movieArray.length; i++) {
@@ -121,10 +146,3 @@ function MovieList() {
     </>
   );
 }
-
-// Pagination
-function Pagination() {
-  return <h2>Pagination</h2>;
-}
-
-
