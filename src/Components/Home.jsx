@@ -8,21 +8,21 @@ import "./Pagination.css";
 import movies from "./Movies";
 
 function Home() {
-    // Paginaation
-    const [pageNo, setPageNo] = React.useState(1);
-    function increasePageNumber() {
-      setPageNo(function (prevState) {
-        return prevState + 1;
-      });
+  // Paginaation
+  const [pageNo, setPageNo] = React.useState(1);
+  function increasePageNumber() {
+    setPageNo(function (prevState) {
+      return prevState + 1;
+    });
+  }
+  function decreasePageNumber() {
+    if (pageNo == 1) {
+      return;
     }
-    function decreasePageNumber() {
-      if (pageNo == 1) {
-        return;
-      }
-      setPageNo(function (prevState) {
-        return prevState - 1;
-      });
-    }
+    setPageNo(function (prevState) {
+      return prevState - 1;
+    });
+  }
   return (
     <>
       <Header></Header>
@@ -30,14 +30,14 @@ function Home() {
       <MovieList pageNo={pageNo}></MovieList>
       {/* Pagination Jsx */}
       <div className="pagination">
-      <div className="previous_btn" onClick={decreasePageNumber}>
-        Previous
+        <div className="previous_btn" onClick={decreasePageNumber}>
+          Previous
+        </div>
+        <div className="page_no">{pageNo}</div>
+        <div className="next_btn" onClick={increasePageNumber}>
+          Next
+        </div>
       </div>
-      <div className="page_no">{pageNo}</div>
-      <div className="next_btn" onClick={increasePageNumber}>
-        Next
-      </div>
-    </div>
     </>
   );
 }
@@ -58,16 +58,19 @@ function Header() {
 // Banner
 function Banner() {
   let [firstMovie, setFirstMovie] = React.useState("");
-  React.useEffect(async function () {
-    // Using fetch() to send a request
-    let response = await fetch(
-      "https://api.themoviedb.org/3/trending/movie/week?api_key=c5ff736cea18f92d40b30cd299575bbd"
-    );
-    // The response would be in buffer(binary form), so conerting it to jason
-    let data = await response.json();
-    // console.log("Data", data);
-    let movies = data.results;
-    setFirstMovie(movies[0]);
+  React.useEffect(function () {
+    async function fetchData() {
+      // Using fetch() to send a request
+      let response = await fetch(
+        "https://api.themoviedb.org/3/trending/movie/week?api_key=c5ff736cea18f92d40b30cd299575bbd"
+      );
+      // The response would be in buffer(binary form), so conerting it to jason
+      let data = await response.json();
+      // console.log("Data", data);
+      let movies = data.results;
+      setFirstMovie(movies[0]);
+    }
+    fetchData();
   }, []);
   return (
     <>
@@ -96,17 +99,19 @@ function MovieList(props) {
     let newValue = e.target.value;
     setValue(newValue);
   }
-  React.useEffect(async function () {
-    // Using fetch() to send a request
-    let response = await fetch(
-      "https://api.themoviedb.org/3/trending/movie/week?api_key=c5ff736cea18f92d40b30cd299575bbd&page="+props.pageNo
-    );
-    // The response would be in buffer(binary form), so conerting it to jason
-    let data = await response.json();
-    // console.log("Data", data);
-    let movies = data.results;
-    setMovies(movies);
-  }, []);
+  React.useEffect(function fn() {
+    async function fetchData() {
+      // Using fetch() to send a request
+      let response = await fetch
+      ("https://api.themoviedb.org/3/trending/movie/week?api_key=c5ff736cea18f92d40b30cd299575bbd&page="+props.pageNo);
+      // The response would be in buffer(binary form), so conerting it to jason
+      let data = await response.json();
+      // console.log("Data", data);
+      let movies = data.results;
+      setMovies(movies);
+    }
+    fetchData();
+  }, [props.pageNo]);
   // Logic To search movies
   function filterLogic(searchText, movieArray) {
     let filteredMovieArray = [];
