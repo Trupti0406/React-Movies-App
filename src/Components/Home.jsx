@@ -5,7 +5,7 @@ import "./Header.css";
 import "./Banner.css";
 import "./MovieList.css";
 import "./Pagination.css";
-import movies from "./Movies";
+import Header from "./Header";
 
 function Home() {
   // Paginaation
@@ -43,17 +43,6 @@ function Home() {
 }
 
 export default Home;
-
-// Header
-function Header() {
-  return (
-    <div className="flex">
-      <img src="https://img.icons8.com/external-bearicons-blue-bearicons/50/000000/external-movie-call-to-action-bearicons-blue-bearicons.png" />
-      <h2>Movies</h2>
-      <h2>Favourites</h2>
-    </div>
-  );
-}
 
 // Banner
 function Banner() {
