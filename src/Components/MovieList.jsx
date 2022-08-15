@@ -9,7 +9,7 @@ function MovieList(props) {
     setValue(newValue);
   }
 
-  function setToFavorite(movieID) {
+  function setToFavoriteHandler(movieID) {
     for (let i = 0; i < movies.length; i++) {
       let movieObj = movies[i];
       if (movieObj.id == movieID) {
@@ -21,14 +21,14 @@ function MovieList(props) {
     }
   }
 
-  function deleteFavorite(movieID) {
+  function deleteFavoriteHandler(movieID) {
     let filteredFavourites = favourites.filter((movieObj) => {
       return movieObj.id != movieID;
     });
     setFavorite(filteredFavourites);
   }
 
-  function checkContainFav(movieID) {
+  function checkContainFavHandler(movieID) {
     for (let i = 0; i < favourites.length; i++) {
       if (favourites[i].id == movieID) {
         return true;
@@ -74,18 +74,18 @@ function MovieList(props) {
                   className="poster_img"
                 ></img>
 
-                {checkContainFav(movieObj.id) ? (
+                {checkContainFavHandler(movieObj.id) ? (
                   <i
                     className="fa-solid fa-xmark icons"
                     onClick={() => {
-                      deleteFavorite(movieObj.id);
+                      deleteFavoriteHandler(movieObj.id);
                     }}
                   ></i>
                 ) : (
                   <i
                     className="fa-solid fa-face-grin-hearts icons"
                     onClick={() => {
-                      setToFavorite(movieObj.id);
+                      setToFavoriteHandler(movieObj.id);
                     }}
                   ></i>
                 )}
@@ -97,6 +97,7 @@ function MovieList(props) {
     </>
   );
 }
+
 // Logic To search movies
 function filterLogic(searchText, movieArray) {
   let filteredMovieArray = [];
