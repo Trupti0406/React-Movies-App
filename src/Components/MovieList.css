@@ -18,3 +18,9 @@
 .poster_img {
     height: 80%;
 }
+
+.icons{
+    font-size: 2rem;
+    cursor: pointer;
+    color: blue;
+}

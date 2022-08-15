@@ -3,10 +3,40 @@ import React from "react";
 function MovieList(props) {
   let [movies, setMovies] = React.useState("");
   let [value, setValue] = React.useState("");
+  let [favourites, setFavorite] = React.useState([]);
   function setText(e) {
     let newValue = e.target.value;
     setValue(newValue);
   }
+
+  function setToFavorite(movieID) {
+    for (let i = 0; i < movies.length; i++) {
+      let movieObj = movies[i];
+      if (movieObj.id == movieID) {
+        let newFavourites = [...favourites];
+        newFavourites.push(movieObj)
+        setFavorite(newFavourites);
+        break;
+      }
+    }
+  }
+
+  function deleteFavorite(movieID) {
+    let filteredFavourites = favourites.filter((movieObj) => {
+      return movieObj.id != movieID;
+    });
+    setFavorite(filteredFavourites);
+  }
+
+  function checkContainFav(movieID) {
+    for (let i = 0; i < favourites.length; i++) {
+      if (favourites[i].id == movieID) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   React.useEffect(
     function fn() {
       async function fetchData() {
@@ -43,8 +73,22 @@ function MovieList(props) {
                   src={"http://image.tmdb.org/t/p/w500/" + movieObj.poster_path}
                   className="poster_img"
                 ></img>
-                {/* <div>❌</div>
-                <div>✔️</div> */}
+
+                {checkContainFav(movieObj.id) ? (
+                  <i
+                    className="fa-solid fa-xmark icons"
+                    onClick={() => {
+                      deleteFavorite(movieObj.id);
+                    }}
+                  ></i>
+                ) : (
+                  <i
+                    className="fa-solid fa-face-grin-hearts icons"
+                    onClick={() => {
+                      setToFavorite(movieObj.id);
+                    }}
+                  ></i>
+                )}
               </div>
             );
           })}
@@ -53,19 +97,18 @@ function MovieList(props) {
     </>
   );
 }
-  // Logic To search movies
-  function filterLogic(searchText, movieArray) {
-    let filteredMovieArray = [];
-    for (let i = 0; i < movieArray.length; i++) {
-      let upperSearchText = searchText.toUpperCase();
-      let movieName = movieArray[i].original_title;
-      let upperText = movieName.toUpperCase();
-      let ans = upperText.includes(upperSearchText);
-      if (ans == true) {
-        filteredMovieArray.push(movieArray[i]);
-      }
+// Logic To search movies
+function filterLogic(searchText, movieArray) {
+  let filteredMovieArray = [];
+  for (let i = 0; i < movieArray.length; i++) {
+    let upperSearchText = searchText.toUpperCase();
+    let movieName = movieArray[i].original_title;
+    let upperText = movieName.toUpperCase();
+    let ans = upperText.includes(upperSearchText);
+    if (ans == true) {
+      filteredMovieArray.push(movieArray[i]);
     }
-    return filteredMovieArray;
   }
+  return filteredMovieArray;
+}
 export default MovieList;
-
