@@ -3,31 +3,61 @@ import React from "react";
 function MovieList(props) {
   let [movies, setMovies] = React.useState("");
   let [value, setValue] = React.useState("");
-  let [favourites, setFavorite] = React.useState([]);
+  let [favourites, setFavourite] = React.useState([]);
   function setText(e) {
     let newValue = e.target.value;
     setValue(newValue);
   }
 
-  function setToFavoriteHandler(movieID) {
+  function setToFavoriteHandler(movieId) {
     for (let i = 0; i < movies.length; i++) {
       let movieObj = movies[i];
-      if (movieObj.id == movieID) {
-        let newFavourites = [...favourites];
-        newFavourites.push(movieObj)
-        setFavorite(newFavourites);
+      if (movieObj.id == movieId) {
+        // [..favorites,movieobj]
+        let newfavourites = [...favourites];
+        newfavourites.push(movieObj);
+        // Add to local storage
+        let prevStrArray = localStorage.getItem("favourites") || "[]";
+        let prevArray = JSON.parse(prevStrArray);
+        prevArray.push(movieObj);
+        prevArray = JSON.stringify(prevArray);
+        localStorage.setItem("favourites", prevArray);
+        setFavourite(newfavourites);
         break;
       }
     }
   }
 
-  function deleteFavoriteHandler(movieID) {
-    let filteredFavourites = favourites.filter((movieObj) => {
-      return movieObj.id != movieID;
-    });
-    setFavorite(filteredFavourites);
-  }
+  // function deleteFavoriteHandler(movieID) {
+  //   let filteredFavourites = favourites.filter((movieObj) => {
+  //     return movieObj.id != movieID;
+  //   });
+  //   // Remove from local storage
+  //   let prevStringArray = localStorage.getItem("favourites") || "[]";
+  //   let prevArray = JSON.parse(prevStringArray);
+  //   prevArray = prevArray.filter((movieObj) => {
+  //     return movieObj.id != movieID;
+  //   });
+  //   prevArray = JSON.stringify(prevArray);
+  //   localStorage.setItem("favorites", prevArray);
+  //   setFavourite(filteredFavourites);
+  // }
 
+  function deleteFavoriteHandler(movieId) {
+    let filteredFavorite = favourites.filter((movieObj) => {
+      return movieObj.id != movieId;
+    });
+
+    let prevStrArray = localStorage.getItem("favourites") || "[]";
+    let prevArray = JSON.parse(prevStrArray);
+    prevArray = prevArray.filter((movieObj) => {
+      return movieObj.id != movieId;
+    });
+    prevArray = JSON.stringify(prevArray);
+    localStorage.setItem("favourites", prevArray);
+    // remove
+    setFavourite(filteredFavorite);
+  }
   function checkContainFavHandler(movieID) {
     for (let i = 0; i < favourites.length; i++) {
       if (favourites[i].id == movieID) {
@@ -56,6 +86,11 @@ function MovieList(props) {
     [props.pageNo]
   );
 
+  React.useEffect(function () {
+    let prevStrArray = localStorage.getItem("favourites") || "[]";
+    let prevArray = JSON.parse(prevStrArray);
+    setFavourite(prevArray);
+  },[]);
   let searchedMovies = filterLogic(value, movies);
   return (
     <>

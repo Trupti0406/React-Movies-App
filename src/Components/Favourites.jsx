@@ -11,6 +11,7 @@ function Favourites() {
   let [currPage, setPage] = useState(1);
   const [genres, setGenres] = useState([]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   let genreids = {
     28: "Action",
     12: "Adventure",
@@ -42,7 +43,7 @@ function Favourites() {
     function () {
       // favoruites update -> new genre
       let temp = favourites.map((movie) => genreids[movie.genre_ids[0]]);
-      console.log(temp);
+      // console.log(temp);
       // unique value hold
       temp = new Set(temp);
       setGenres(["All Genres", ...temp]);
@@ -58,6 +59,7 @@ function Favourites() {
     setRatingOrder(null);
     setPopularity(order);
   }
+  
   function setTextHandler(e) {
     let newValue = e.target.value;
     setValue(newValue);
@@ -136,14 +138,14 @@ function Favourites() {
             <th>
               {" "}
               <i
-                class="fa-solid fa-angle-up angleIcons"
+                class="fa-solid fa-angle-up"
                 onClick={() => {
                   setRatingHandler(true);
                 }}
               ></i>
               Rating
               <i
-                class="fa-solid fa-angle-down angleIcons"
+                class="fa-solid fa-angle-down"
                 onClick={() => {
                   setRatingHandler(false);
                 }}
@@ -151,21 +153,21 @@ function Favourites() {
             </th>
             <th>
               <i
-                class="fa-solid fa-angle-up angleIcons"
+                class="fa-solid fa-angle-up"
                 onClick={() => {
                   setPopularityhandler(true);
                 }}
               ></i>
               Popularity
               <i
-                class="fa-solid fa-angle-down angleIcons"
+                class="fa-solid fa-angle-down"
                 onClick={() => {
                   setPopularityhandler(false);
                 }}
               ></i>
             </th>
             <th>Genre</th>
-            <th>Remove</th>
+                    <th>Remove</th>
           </tr>
         </thead>
         <tbody>
@@ -177,7 +179,8 @@ function Favourites() {
                     src={
                       "https://image.tmdb.org/t/p/w500/" + movieObj.poster_path
                     }
-                    style={{ height: "20rem" }}
+                    className="poster_img"
+                    style={{ height: "15rem" }}
                   ></img>
                   <h4>{movieObj.original_title}</h4>
                 </td>
