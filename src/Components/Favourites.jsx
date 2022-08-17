@@ -48,7 +48,7 @@ function Favourites() {
       temp = new Set(temp);
       setGenres(["All Genres", ...temp]);
     },
-    [favourites]
+    [favourites, genreids]
   );
 
   function setRatingHandler(order) {
@@ -59,7 +59,7 @@ function Favourites() {
     setRatingOrder(null);
     setPopularity(order);
   }
-  
+
   function setTextHandler(e) {
     let newValue = e.target.value;
     setValue(newValue);
@@ -90,13 +90,13 @@ function Favourites() {
   // searching
   let searchedMovies =
     searchtext == "" ? favourites : filterLogic(searchtext, favourites);
-  console.log("searchedmovies", searchedMovies);
+  // console.log("searchedmovies", searchedMovies);
   // sorting
   let ratedMovies =
     ratingOrder == null
       ? searchedMovies
       : sortFavourites(ratingOrder, searchedMovies);
-  console.log("searchedmovies", ratedMovies);
+  // console.log("searchedmovies", ratedMovies);
   let sortedByrateNPop =
     popularityOrder == null
       ? ratedMovies
@@ -167,7 +167,7 @@ function Favourites() {
               ></i>
             </th>
             <th>Genre</th>
-                    <th>Remove</th>
+            <th>Remove</th>
           </tr>
         </thead>
         <tbody>
